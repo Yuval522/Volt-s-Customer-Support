@@ -1,0 +1,1428 @@
+{
+  "agent_id": "",
+  "channel": "voice",
+  "last_modification_timestamp": 1746709906882,
+  "agent_name": "Volt’s Customer Support",
+  "response_engine": {
+    "type": "conversation-flow",
+    "version": 1,
+    "conversation_flow_id": "conversation_flow_fe8da7cebf16"
+  },
+  "language": "en-US",
+  "opt_out_sensitive_data_storage": false,
+  "version": 1,
+  "is_published": false,
+  "version_title": "Volt’s Customer Support",
+  "voice_id": "11labs-Myra",
+  "enable_backchannel": true,
+  "backchannel_words": [
+    "yeah",
+    "uh-huh",
+    "I see",
+    "okay",
+    "got it",
+    "sure"
+  ],
+  "max_call_duration_ms": 3600000,
+  "interruption_sensitivity": 0.8,
+  "boosted_keywords": [
+    "Volt",
+    "order",
+    "refund",
+    "delivery",
+    "support",
+    "agent",
+    "payment",
+    "problem",
+    "track",
+    "login",
+    "crash",
+    "update"
+  ],
+  "responsiveness": 0.87,
+  "normalize_for_speech": true,
+  "voicemail_detection_timeout_ms": 30000,
+  "user_dtmf_options": {},
+  "retellLlmData": null,
+  "conversationFlow": {
+    "conversation_flow_id": "conversation_flow_fe8da7cebf16",
+    "version": 1,
+    "global_prompt": "You are Myra, Volt’s virtual support assistant.\n\nYour role is to assist customers with:\n- Deliveries (status updates, delays, or issues)\n- Orders (placing, updating, or canceling)\n- Refund requests for previous purchases\n- Payment-related questions\n- App troubleshooting \n\nYou operate in a voice call environment, and users' speech may be imperfectly transcribed. Do your best to interpret their intent. If unsure, ask short clarifying questions.\n\nAlways maintain a friendly, helpful, and efficient tone that aligns with Volt’s customer experience standards.\n\nWhen helping the user, guide them through clear next steps toward resolution. Prioritize minimal refunds or additional costs when possible, while ensuring high customer satisfaction.\n\nIf the user’s input is vague, unclear, or unrelated to your tasks, ask for clarification or politely offer to connect them to a live support agent.\n",
+    "nodes": [
+      {
+        "instruction": {
+          "type": "static_text",
+          "text": "Hi! This is Myra from Volt support. How can I help you today?\n"
+        },
+        "name": "Welcome Node",
+        "edges": [],
+        "start_speaker": "agent",
+        "id": "start-node-1735257992613",
+        "type": "conversation",
+        "display_position": {
+          "x": 500,
+          "y": 198
+        }
+      },
+      {
+        "finetune_conversation_examples": [],
+        "instruction": {
+          "type": "prompt",
+          "text": "Ask user what's the reason for their refund request."
+        },
+        "name": "Refund start",
+        "edges": [
+          {
+            "condition": "if the reason is not reasonable",
+            "id": "edge-1735258172746",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "if the reason is not reasonable"
+            },
+            "destination_node_id": "node-1736564414014"
+          },
+          {
+            "condition": "if the reason is reasonable",
+            "id": "edge-1735258439867",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "if the reason is reasonable"
+            },
+            "destination_node_id": "node-1736564330428"
+          }
+        ],
+        "global_node_setting": {
+          "condition": "User needs to initiate a refund of a purchase"
+        },
+        "id": "node-1735258172746",
+        "type": "conversation",
+        "display_position": {
+          "x": 17.965725052559407,
+          "y": 516.5783276010768
+        }
+      },
+      {
+        "transfer_destination": {
+          "type": "predefined",
+          "number": "+12134447777"
+        },
+        "edge": {
+          "condition": "Transfer failed",
+          "id": "edge-1735258244971",
+          "transition_condition": {
+            "type": "prompt",
+            "prompt": "Transfer failed"
+          },
+          "destination_node_id": "node-1735258555254"
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Transferring your call now."
+        },
+        "name": "Transfer Call",
+        "global_node_setting": {
+          "condition": "User is angry and wants to talk to a human."
+        },
+        "id": "node-1735258244971",
+        "transfer_option": {
+          "type": "cold_transfer",
+          "show_transferee_as_caller": false
+        },
+        "type": "transfer_call",
+        "display_position": {
+          "x": 2000,
+          "y": 965
+        }
+      },
+      {
+        "tool_id": "tool-1735258495443",
+        "name": "Refund",
+        "edges": [
+          {
+            "condition": "refund successful",
+            "id": "edge-1735258504620",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "refund successful"
+            },
+            "destination_node_id": "node-1736563726474"
+          },
+          {
+            "condition": "refund unsuccessful",
+            "id": "edge-1736563612117",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "refund unsuccessful"
+            },
+            "destination_node_id": "node-1736564247278"
+          }
+        ],
+        "id": "node-1735258497049",
+        "type": "function",
+        "tool_type": "local",
+        "speak_during_execution": false,
+        "display_position": {
+          "x": 1000,
+          "y": 567
+        },
+        "wait_for_result": true
+      },
+      {
+        "instruction": {
+          "type": "static_text",
+          "text": "We’re having a temporary issue with our transfer system. A supervisor will contact you shortly after the call.\n"
+        },
+        "name": "Conversation",
+        "edges": [
+          {
+            "condition": "hang up the call",
+            "id": "edge-1735258555254",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "hang up the call"
+            }
+          }
+        ],
+        "id": "node-1735258555254",
+        "type": "conversation",
+        "display_position": {
+          "x": 2469.0137465177227,
+          "y": 901.4178122098103
+        },
+        "skip_response_edge": {
+          "condition": "Skip response",
+          "id": "edge-1736563504612",
+          "transition_condition": {
+            "type": "prompt",
+            "prompt": "Skip response"
+          },
+          "destination_node_id": "node-1735258611429"
+        }
+      },
+      {
+        "name": "End Call",
+        "id": "node-1735258611429",
+        "type": "end",
+        "display_position": {
+          "x": 3000,
+          "y": 1029
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Politely end the call"
+        }
+      },
+      {
+        "name": "Conversation",
+        "edges": [
+          {
+            "condition": "No more help needed",
+            "id": "edge-1736563726474",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "No more help needed"
+            },
+            "destination_node_id": "node-1736565126113"
+          }
+        ],
+        "id": "node-1736563726474",
+        "type": "conversation",
+        "display_position": {
+          "x": 2000,
+          "y": 528
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Tell user that you've already refunded to their original method of payment. Ask if they need any additional help."
+        }
+      },
+      {
+        "instruction": {
+          "type": "static_text",
+          "text": "It seems like there some technical issues with our system right now, let me transfer you to our representative to help further. Please hold on."
+        },
+        "name": "Conversation",
+        "edges": [
+          {
+            "condition": "Describe the transition condition",
+            "id": "edge-1736564247278",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Describe the transition condition"
+            }
+          }
+        ],
+        "id": "node-1736564247278",
+        "type": "conversation",
+        "display_position": {
+          "x": 1500,
+          "y": 330
+        },
+        "skip_response_edge": {
+          "condition": "Skip response",
+          "id": "edge-1736564289941",
+          "transition_condition": {
+            "type": "prompt",
+            "prompt": "Skip response"
+          },
+          "destination_node_id": "node-1735258244971"
+        }
+      },
+      {
+        "name": "Conversation",
+        "edges": [
+          {
+            "condition": "order id obtained",
+            "id": "edge-1736564330428",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "order id obtained"
+            },
+            "destination_node_id": "node-1735258497049"
+          }
+        ],
+        "id": "node-1736564330428",
+        "type": "conversation",
+        "display_position": {
+          "x": 500,
+          "y": 528
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "ask user for the order id that they want to refund for."
+        }
+      },
+      {
+        "instruction": {
+          "type": "prompt",
+          "text": "I understand. Let me connect you to a representative who can help further.\n"
+        },
+        "name": "Conversation",
+        "edges": [
+          {
+            "condition": "Describe the transition condition",
+            "id": "edge-1736564414014",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Describe the transition condition"
+            }
+          }
+        ],
+        "id": "node-1736564414014",
+        "type": "conversation",
+        "display_position": {
+          "x": 1500,
+          "y": 919
+        },
+        "skip_response_edge": {
+          "condition": "Skip response",
+          "id": "edge-1736564494441",
+          "transition_condition": {
+            "type": "prompt",
+            "prompt": "Skip response"
+          },
+          "destination_node_id": "node-1735258244971"
+        }
+      },
+      {
+        "instruction": {
+          "type": "prompt",
+          "text": "Politely say goodbye"
+        },
+        "name": "Conversation",
+        "edges": [
+          {
+            "condition": "Describe the transition condition",
+            "id": "edge-1736565126113",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Describe the transition condition"
+            }
+          }
+        ],
+        "id": "node-1736565126113",
+        "type": "conversation",
+        "display_position": {
+          "x": 2500,
+          "y": 528
+        },
+        "skip_response_edge": {
+          "condition": "Skip response",
+          "id": "edge-1736565853445",
+          "transition_condition": {
+            "type": "prompt",
+            "prompt": "Skip response"
+          },
+          "destination_node_id": "node-1735258611429"
+        }
+      },
+      {
+        "instruction": {
+          "type": "prompt",
+          "text": "I’m sorry to hear the Volt app isn’t working as expected. Let me try to help you get it back up and running.\n"
+        },
+        "name": "App troubleshooting",
+        "edges": [
+          {
+            "destination_node_id": "node-1746599822680",
+            "id": "edge-1746599551902",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Ask Device Type"
+            }
+          }
+        ],
+        "global_node_setting": {
+          "condition": "If the user mentions that the Volt app isn’t working, crashes, won’t load, or is unresponsive.\n"
+        },
+        "id": "node-1746599551902",
+        "type": "conversation",
+        "display_position": {
+          "x": 189.5016087246973,
+          "y": 1133.4894926687125
+        }
+      },
+      {
+        "name": "Ask Device Type",
+        "edges": [
+          {
+            "destination_node_id": "node-1746599938779",
+            "id": "edge-1746599822680",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Troubleshooting Steps"
+            }
+          }
+        ],
+        "id": "node-1746599822680",
+        "type": "conversation",
+        "display_position": {
+          "x": 633.786586545959,
+          "y": 1135.35508924908
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Can I ask what kind of phone you're using — is it an Android or an iPhone?\n"
+        }
+      },
+      {
+        "name": "Troubleshooting Steps",
+        "edges": [
+          {
+            "destination_node_id": "node-1746600026681",
+            "id": "edge-1746599938779",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "always\n"
+            }
+          }
+        ],
+        "id": "node-1746599938779",
+        "type": "conversation",
+        "display_position": {
+          "x": 1046.154128350202,
+          "y": 1107.9314475677447
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Thanks! Please try the following steps:\n1. Force-close the app and reopen it.\n2. Make sure you have the latest version installed from the App Store or Google Play.\n3. Restart your phone if needed.\nLet me know if that helps.\n"
+        }
+      },
+      {
+        "name": "Confirm Fix",
+        "edges": [
+          {
+            "destination_node_id": "node-1746600575192",
+            "id": "edge-1746600026681",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "still not working"
+            }
+          },
+          {
+            "destination_node_id": "node-1746600574488",
+            "id": "edge-1746600145015",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "yes"
+            }
+          }
+        ],
+        "id": "node-1746600026681",
+        "type": "conversation",
+        "display_position": {
+          "x": 1429.9427651239332,
+          "y": 1376.0629259627178
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Were you able to fix the issue with those steps?\n"
+        }
+      },
+      {
+        "name": "App Fixed – Success",
+        "edges": [
+          {
+            "destination_node_id": "node-1746601250818",
+            "id": "edge-1746600574488",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "No more help needed"
+            }
+          }
+        ],
+        "id": "node-1746600574488",
+        "type": "conversation",
+        "display_position": {
+          "x": 1815,
+          "y": 1320
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Great! I’m glad to hear it’s working now. Is there anything else I can help you with?\n"
+        }
+      },
+      {
+        "name": "App Not Fixed – Escalate",
+        "edges": [
+          {
+            "destination_node_id": "node-1746600852765",
+            "id": "edge-1746600575192",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "skip response"
+            }
+          }
+        ],
+        "id": "node-1746600575192",
+        "type": "conversation",
+        "display_position": {
+          "x": 1846.5714818373658,
+          "y": 1803.4313217495076
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "No worries — I’ll connect you to a support representative who can help further.\n"
+        }
+      },
+      {
+        "name": "End Call",
+        "id": "node-1746600624228",
+        "type": "end",
+        "display_position": {
+          "x": 2840.4623764051903,
+          "y": 1703.3023869217607
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Politely end the call"
+        }
+      },
+      {
+        "transfer_destination": {
+          "type": "predefined",
+          "number": "+12134447777"
+        },
+        "edge": {
+          "condition": "Transfer failed",
+          "id": "edge-1746600852765-db1cwwi2x",
+          "transition_condition": {
+            "type": "prompt",
+            "prompt": "Transfer failed"
+          },
+          "destination_node_id": "node-1746600876747"
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Transferring your call now."
+        },
+        "name": "Transfer Call",
+        "global_node_setting": {
+          "condition": "User is angry and wants to talk to a human."
+        },
+        "id": "node-1746600852765",
+        "transfer_option": {
+          "type": "cold_transfer",
+          "show_transferee_as_caller": false
+        },
+        "type": "transfer_call",
+        "display_position": {
+          "x": 2307.2380350267044,
+          "y": 1740.6946939137372
+        }
+      },
+      {
+        "instruction": {
+          "type": "static_text",
+          "text": "We’re having a temporary issue with our transfer system. A supervisor will contact you shortly after the call.\n"
+        },
+        "name": "Conversation",
+        "edges": [
+          {
+            "condition": "hang up the call",
+            "id": "edge-1746600876748-c5oj4uion",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "hang up the call"
+            }
+          }
+        ],
+        "id": "node-1746600876747",
+        "type": "conversation",
+        "display_position": {
+          "x": 2417.0325316297226,
+          "y": 2024.5374010889864
+        },
+        "skip_response_edge": {
+          "condition": "Skip response",
+          "id": "edge-1746600876748-fgspcv1m9",
+          "transition_condition": {
+            "type": "prompt",
+            "prompt": "Skip response"
+          },
+          "destination_node_id": "node-1746600624228"
+        }
+      },
+      {
+        "name": "Conversation",
+        "edges": [
+          {
+            "destination_node_id": "node-1746600624228",
+            "id": "edge-1746601250818",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Skip response"
+            }
+          }
+        ],
+        "id": "node-1746601250818",
+        "type": "conversation",
+        "display_position": {
+          "x": 2354.8433760098656,
+          "y": 1386.7020054862123
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Politely say goodbye\n"
+        }
+      },
+      {
+        "instruction": {
+          "type": "prompt",
+          "text": "I’m sorry you’re having a problem with your payment. Let’s figure it out together.\n"
+        },
+        "name": "Payment Issue",
+        "edges": [
+          {
+            "destination_node_id": "node-1746609651116",
+            "id": "edge-1746608915753",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Ask Payment Issue Type\n"
+            }
+          }
+        ],
+        "global_node_setting": {
+          "condition": "user mentions a payment issue"
+        },
+        "id": "node-1746608915753",
+        "type": "conversation",
+        "display_position": {
+          "x": -255.4519251953886,
+          "y": 2544.866787716683
+        }
+      },
+      {
+        "name": "Classify Payment Issue",
+        "edges": [
+          {
+            "destination_node_id": "node-1746609941529",
+            "id": "edge-1746609909807",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Overcharged"
+            }
+          },
+          {
+            "destination_node_id": "node-1746609941186",
+            "id": "edge-1746609911394",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Unclear"
+            }
+          },
+          {
+            "destination_node_id": "node-1746609941988",
+            "id": "edge-1746609651116",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Declined Card"
+            }
+          }
+        ],
+        "id": "node-1746609651116",
+        "type": "conversation",
+        "display_position": {
+          "x": 264.81899334112774,
+          "y": 2323.3696012762643
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Can you tell me more about the issue was your card declined, or were you charged incorrectly?\n"
+        }
+      },
+      {
+        "name": "Clarify Payment Issue",
+        "edges": [
+          {
+            "destination_node_id": "node-1746613101312",
+            "id": "edge-1746609941186",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "\"not sure\", \"I don’t know\", \"no idea\", \"unclear\", \"I can’t tell\", \"no clue\", \"maybe both\"\n"
+            }
+          }
+        ],
+        "id": "node-1746609941186",
+        "type": "conversation",
+        "display_position": {
+          "x": 789.4692053198379,
+          "y": 2342.3036608455595
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Thanks for sharing. Can you clarify if the issue is a failed payment or a wrong charge?\n"
+        }
+      },
+      {
+        "name": "Overcharged",
+        "edges": [
+          {
+            "id": "edge-1746609941529",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Jump to existing node: Refund start"
+            }
+          }
+        ],
+        "id": "node-1746609941529",
+        "type": "conversation",
+        "display_position": {
+          "x": 1345.9964570282564,
+          "y": 2243.6700033008633
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "I'm really sorry to hear that. Can you please provide your order ID so I can look into this for you?\n"
+        }
+      },
+      {
+        "name": "Declined Card",
+        "edges": [
+          {
+            "destination_node_id": "node-1746612478881",
+            "id": "edge-1746612380979",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Still not working, Declined again"
+            }
+          },
+          {
+            "destination_node_id": "node-1746612418904",
+            "id": "edge-1746609941988",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "It worked, Payment went through"
+            }
+          }
+        ],
+        "id": "node-1746609941988",
+        "type": "conversation",
+        "display_position": {
+          "x": 764.2033911602437,
+          "y": 2714.51045827352
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "It might be a temporary issue. Please double-check your card details and try again. \n"
+        }
+      },
+      {
+        "name": "Card Fixed – Success",
+        "edges": [
+          {
+            "destination_node_id": "node-1746612449090",
+            "id": "edge-1746612418905-pv9vf5ita",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "No more help needed"
+            }
+          }
+        ],
+        "id": "node-1746612418904",
+        "type": "conversation",
+        "display_position": {
+          "x": 1285.4758292911758,
+          "y": 3026.624418444107
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Great! I’m glad to hear it’s working now. Is there anything else I can help you with?\n"
+        }
+      },
+      {
+        "name": "Conversation",
+        "edges": [
+          {
+            "destination_node_id": "node-1746612528499",
+            "id": "edge-1746612449090-azsi6ym34",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Skip response"
+            }
+          }
+        ],
+        "id": "node-1746612449090",
+        "type": "conversation",
+        "display_position": {
+          "x": 1690.8406920532357,
+          "y": 3043.1679277117837
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Politely say goodbye"
+        }
+      },
+      {
+        "name": "Still not working",
+        "edges": [
+          {
+            "destination_node_id": "node-1746613101312",
+            "id": "edge-1746612478881-dzcuh7mt3",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "skip response"
+            }
+          }
+        ],
+        "id": "node-1746612478881",
+        "type": "conversation",
+        "display_position": {
+          "x": 1288.652434272132,
+          "y": 2721.754218114228
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "No worries — I’ll connect you to a support representative who can help further.\n"
+        }
+      },
+      {
+        "name": "End Call",
+        "id": "node-1746612528499",
+        "type": "end",
+        "display_position": {
+          "x": 2725.777836886276,
+          "y": 3045.396250108064
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Politely end the call"
+        }
+      },
+      {
+        "transfer_destination": {
+          "type": "predefined",
+          "number": "+12134447777"
+        },
+        "edge": {
+          "condition": "Transfer failed",
+          "id": "edge-1746613101312-o6ucgg56v",
+          "transition_condition": {
+            "type": "prompt",
+            "prompt": "Transfer failed"
+          },
+          "destination_node_id": "node-1746613112561"
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Transferring your call now."
+        },
+        "name": "Transfer Call",
+        "global_node_setting": {
+          "condition": "User is angry and wants to talk to a human."
+        },
+        "id": "node-1746613101312",
+        "transfer_option": {
+          "type": "cold_transfer",
+          "show_transferee_as_caller": false
+        },
+        "type": "transfer_call",
+        "display_position": {
+          "x": 1858.0000275294974,
+          "y": 2623.6640250666137
+        }
+      },
+      {
+        "instruction": {
+          "type": "static_text",
+          "text": "We’re having a temporary issue with our transfer system. A supervisor will contact you shortly after the call.\n"
+        },
+        "name": "Conversation",
+        "edges": [
+          {
+            "condition": "hang up the call",
+            "id": "edge-1746613112561-3mn11wyiv",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "hang up the call"
+            }
+          }
+        ],
+        "id": "node-1746613112561",
+        "type": "conversation",
+        "display_position": {
+          "x": 2291.5895321711446,
+          "y": 2649.4660558070505
+        },
+        "skip_response_edge": {
+          "condition": "Skip response",
+          "id": "edge-1746613112561-b1mnfovsa",
+          "transition_condition": {
+            "type": "prompt",
+            "prompt": "Skip response"
+          },
+          "destination_node_id": "node-1746612528499"
+        }
+      },
+      {
+        "instruction": {
+          "type": "prompt",
+          "text": "I’m sorry to hear there’s a problem with your delivery. Can you tell me what happened?\nFor example, is the order late, missing, or did the courier not show up?\n"
+        },
+        "name": "Classify Delivery Issue",
+        "edges": [
+          {
+            "destination_node_id": "node-1746626824409",
+            "id": "edge-1746626525174",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Late Delivery"
+            }
+          },
+          {
+            "destination_node_id": "node-1746627712596",
+            "id": "edge-1746626637832",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Missing Order"
+            }
+          }
+        ],
+        "global_node_setting": {
+          "condition": "mentions delivery issue, like \"order not delivered\", \"missing food\", \"courier issue\", \"didn’t receive delivery\", \"order late\"\n"
+        },
+        "id": "node-1746626525174",
+        "type": "conversation",
+        "display_position": {
+          "x": -212.95510110599935,
+          "y": 3442.142319340705
+        }
+      },
+      {
+        "name": "Check Order Status",
+        "edges": [
+          {
+            "destination_node_id": "node-1746626952000",
+            "id": "edge-1746626824409",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "\"order number is\", \"it's\", \"my order ID is\", \"number is\", \"id\"\n"
+            }
+          }
+        ],
+        "id": "node-1746626824409",
+        "type": "conversation",
+        "display_position": {
+          "x": 301.2141592340289,
+          "y": 3420.303329359377
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Sorry to hear that your order is running late.\nIt might still be on its way. Would you like me to check the status for you?\nPlease share your Order ID."
+        }
+      },
+      {
+        "tool_id": "tool-1736319030065",
+        "name": "Check Order",
+        "edges": [
+          {
+            "destination_node_id": "node-1746627186898",
+            "id": "edge-1746627032952",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Check successful"
+            }
+          },
+          {
+            "destination_node_id": "node-1746627479787",
+            "id": "edge-1746627037675",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Check unsuccessful"
+            }
+          }
+        ],
+        "id": "node-1746626952000",
+        "type": "function",
+        "tool_type": "local",
+        "speak_during_execution": false,
+        "display_position": {
+          "x": 734.9832408795868,
+          "y": 3508.126379015331
+        },
+        "wait_for_result": true
+      },
+      {
+        "name": "Check successful",
+        "edges": [
+          {
+            "destination_node_id": "node-1746627403573",
+            "id": "edge-1746627186898",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "user has no more questions"
+            }
+          }
+        ],
+        "id": "node-1746627186898",
+        "type": "conversation",
+        "display_position": {
+          "x": 1343.6837295975176,
+          "y": 3452.773918236659
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "I found your order. It's currently on its way and is expected to arrive by [insert delivery time].  \nLet me know if you have any questions or need help with anything else.\n"
+        }
+      },
+      {
+        "instruction": {
+          "type": "prompt",
+          "text": "Politely say goodbye"
+        },
+        "name": "Conversation",
+        "edges": [
+          {
+            "condition": "Describe the transition condition",
+            "id": "edge-1746627403573-ev3o5bokq",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Describe the transition condition"
+            }
+          }
+        ],
+        "id": "node-1746627403573",
+        "type": "conversation",
+        "display_position": {
+          "x": 1879.056872945124,
+          "y": 3641.854942349696
+        },
+        "skip_response_edge": {
+          "condition": "Skip response",
+          "id": "edge-1746627403573-i1t2fx9ms",
+          "transition_condition": {
+            "type": "prompt",
+            "prompt": "Skip response"
+          },
+          "destination_node_id": "node-1746627414792"
+        }
+      },
+      {
+        "name": "End Call",
+        "id": "node-1746627414792",
+        "type": "end",
+        "display_position": {
+          "x": 2454.4957168633464,
+          "y": 3872.1190606414825
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Politely end the call"
+        }
+      },
+      {
+        "name": "Check unsuccessful",
+        "edges": [
+          {
+            "destination_node_id": "node-1746627561825",
+            "id": "edge-1746640819800",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Transfer Call"
+            }
+          }
+        ],
+        "id": "node-1746627479787",
+        "type": "conversation",
+        "display_position": {
+          "x": 1263.343044381204,
+          "y": 3803.811379148213
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "I wasn’t able to locate your order. I’m transferring you to a support representative who can help further.\n"
+        }
+      },
+      {
+        "transfer_destination": {
+          "type": "predefined",
+          "number": "+12134447777"
+        },
+        "edge": {
+          "destination_node_id": "node-1746627414792",
+          "id": "edge-1746627561825",
+          "transition_condition": {
+            "type": "prompt",
+            "prompt": "Transfer failed"
+          }
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Transferring your call now."
+        },
+        "name": "Transfer Call",
+        "global_node_setting": {
+          "condition": "Describe the condition to jump to this node"
+        },
+        "id": "node-1746627561825",
+        "transfer_option": {
+          "type": "cold_transfer",
+          "show_transferee_as_caller": false
+        },
+        "type": "transfer_call",
+        "display_position": {
+          "x": 1841.2236687597788,
+          "y": 4100.843014766799
+        }
+      },
+      {
+        "name": "Missing Order",
+        "edges": [
+          {
+            "destination_node_id": "node-1746627986754",
+            "id": "edge-1746627821153",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "if the reason is not reasonable"
+            }
+          },
+          {
+            "destination_node_id": "node-1746627894895",
+            "id": "edge-1746627822713",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "if the reason is reasonable"
+            }
+          }
+        ],
+        "id": "node-1746627712596",
+        "type": "conversation",
+        "display_position": {
+          "x": 210.72133035697823,
+          "y": 3899.805971129259
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "I’m sorry to hear that an item was missing from your delivery. Let me help you with that. Can you tell me what item was missing?\n"
+        }
+      },
+      {
+        "name": "Refund",
+        "edges": [
+          {
+            "id": "edge-1746627856490-gthinjcpb",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Jump to existing node: Refund"
+            }
+          }
+        ],
+        "id": "node-1746627856490",
+        "type": "conversation",
+        "display_position": {
+          "x": 1387.6496989122106,
+          "y": 4667.647046500894
+        },
+        "instruction": {
+          "type": "static_text",
+          "text": "I’m really sorry for the inconvenience. Thanks for letting me know — I’ll issue a refund for the missing item right away. You should see the refund within 3–5 business days.\n"
+        }
+      },
+      {
+        "name": "Conversation",
+        "edges": [
+          {
+            "condition": "order id obtained",
+            "id": "edge-1746627894895-mkhdr77p3",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "\"order number is\", \"it's\", \"my order ID is\", \"number is\", \"id\"\n"
+            },
+            "destination_node_id": "node-1746627856490"
+          }
+        ],
+        "id": "node-1746627894895",
+        "type": "conversation",
+        "display_position": {
+          "x": 651.9765590890812,
+          "y": 4283.746028302473
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "ask user for the order id that they want to refund for."
+        }
+      },
+      {
+        "name": "Conversation",
+        "edges": [
+          {
+            "condition": "Describe the transition condition",
+            "id": "edge-1746627986754-g5z70l1oq",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Transfer Call"
+            },
+            "destination_node_id": "node-1746627561825"
+          }
+        ],
+        "id": "node-1746627986754",
+        "type": "conversation",
+        "display_position": {
+          "x": 701.3194825156728,
+          "y": 3866.2408056719974
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "I understand. Let me connect you to a representative who can help further.\n"
+        }
+      },
+      {
+        "instruction": {
+          "type": "prompt",
+          "text": "I can help with general questions about using the Volt app — things like how to place an order, update your address, troubleshooting or view past deliveries.\nCould you please tell me what you're trying to do?"
+        },
+        "name": "General App Questions",
+        "edges": [
+          {
+            "destination_node_id": "node-1746599551902",
+            "id": "edge-1746628598851",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "App troubleshooting"
+            }
+          },
+          {
+            "destination_node_id": "node-1746628955422",
+            "id": "edge-1746628629929",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "How to place an order"
+            }
+          },
+          {
+            "destination_node_id": "node-1746629011151",
+            "id": "edge-1746628880211",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Update your address"
+            }
+          },
+          {
+            "destination_node_id": "node-1746639389916",
+            "id": "edge-1746639352248",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Order History"
+            }
+          }
+        ],
+        "global_node_setting": {
+          "condition": "Describe the condition to jump to this node"
+        },
+        "id": "node-1746628598851",
+        "type": "conversation",
+        "display_position": {
+          "x": -327.10665419306304,
+          "y": 1236.7761956734369
+        }
+      },
+      {
+        "name": "Placing an Order",
+        "edges": [
+          {
+            "destination_node_id": "node-1746629166504",
+            "id": "edge-1746628955422",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "No more help needed"
+            }
+          }
+        ],
+        "id": "node-1746628955422",
+        "type": "conversation",
+        "display_position": {
+          "x": 634.3991156127647,
+          "y": 1467.7594947398184
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Sure! To place an order, just open the Volt app, choose your items, add them to the cart, and tap 'Checkout'. "
+        }
+      },
+      {
+        "name": " Updating Address",
+        "edges": [
+          {
+            "destination_node_id": "node-1746629166504",
+            "id": "edge-1746629011151-rjfdcvfbj",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "No more help needed"
+            }
+          }
+        ],
+        "id": "node-1746629011151",
+        "type": "conversation",
+        "display_position": {
+          "x": 313.917048496731,
+          "y": 1698.5199218840287
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "To update your address, go to the app’s settings, tap on 'Delivery Address', and enter your new details. "
+        }
+      },
+      {
+        "instruction": {
+          "type": "prompt",
+          "text": "Politely say goodbye\n"
+        },
+        "name": "Conversation",
+        "edges": [
+          {
+            "condition": "Describe the transition condition",
+            "id": "edge-1746629166504-wlgwceh2m",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Describe the transition condition"
+            }
+          }
+        ],
+        "id": "node-1746629166504",
+        "type": "conversation",
+        "display_position": {
+          "x": 1069.8507632723808,
+          "y": 1808.3765032954036
+        },
+        "skip_response_edge": {
+          "condition": "Skip response",
+          "id": "edge-1746629166504-ft69s3r5w",
+          "transition_condition": {
+            "type": "prompt",
+            "prompt": "Skip response"
+          },
+          "destination_node_id": "node-1746629203465"
+        }
+      },
+      {
+        "name": "End Call",
+        "id": "node-1746629203465",
+        "type": "end",
+        "display_position": {
+          "x": 1507.190829045329,
+          "y": 1861.623139557457
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Politely end the call"
+        }
+      },
+      {
+        "name": "Order History",
+        "edges": [
+          {
+            "destination_node_id": "node-1746629166504",
+            "id": "edge-1746639389916",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "No more help needed"
+            }
+          }
+        ],
+        "id": "node-1746639389916",
+        "type": "conversation",
+        "display_position": {
+          "x": -56.554468990306,
+          "y": 1756.1734931242643
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "You can view your previous deliveries by opening the Volt app and tapping on “Order History” in the main menu.\n"
+        }
+      }
+    ],
+    "start_node_id": "start-node-1735257992613",
+    "start_speaker": "agent",
+    "tools": [
+      {
+        "name": "refund_order",
+        "description": "",
+        "tool_id": "tool-1735258495443",
+        "type": "custom",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "order_id": {
+              "type": "string",
+              "description": "The id of the order to refund."
+            }
+          },
+          "required": [
+            "order_id"
+          ]
+        },
+        "url": "https://api.retellai.com/random_status"
+      },
+      {
+        "name": "check_order",
+        "description": "Check order status given an order id.",
+        "tool_id": "tool-1736319030065",
+        "type": "custom",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "order_id": {
+              "type": "string",
+              "description": "The id of the order to check."
+            }
+          },
+          "required": [
+            "order_id"
+          ]
+        },
+        "url": "https://api.retellai.com/var_test"
+      }
+    ],
+    "model_choice": {
+      "type": "cascading",
+      "model": "gpt-4o"
+    },
+    "begin_tag_display_position": {
+      "x": 111.5,
+      "y": 299
+    },
+    "is_published": false,
+    "knowledge_base_ids": []
+  },
+  "llmURL": null
+}
